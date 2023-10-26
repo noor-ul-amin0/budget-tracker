@@ -1,0 +1,88 @@
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const validator = require('validator');
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      minlength: 3,
+      trim: true,
+      required: [true, 'Please provide your name'],
+    },
+    email: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      validate: [validator.isEmail, 'Please provide a valid email'],
+    },
+    password: {
+      type: String,
+      required: [true, 'Please provide your password'],
+      minlength: 5,
+      validate(value) {
+        let password = value.toLowerCase();
+        if (password.includes('password')) {
+          throw new Error(`password must not be 'password'`);
+        }
+      },
+      select: false,
+    },
+    budgetLimit: {
+      type: Number,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+//-------------------------------------------------------------------------------------------------------------
+
+userSchema.pre('save', async function (next) {
+  const user = this;
+  if (!user.isModified('password')) return next();
+  user.password = await bcrypt.hash(user.password, 12);
+  next();
+});
+//-------------------------------------------------------------------------------------------------------------
+userSchema.methods.confirmPassword = async function (
+  candidatePassword,
+  savePassword
+) {
+  return await bcrypt.compare(candidatePassword, savePassword);
+};
+//-------------------------------------------------------------------------------------------------------------
+// generating auth token
+userSchema.methods.generateAuthToken = async function () {
+  const user = this;
+  const token = jwt.sign(
+    {
+      id: user._id + '',
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '2 days',
+    }
+  );
+  return token;
+};
+
+//-------------------------------------------------------------------------------------------------------------
+userSchema.statics.findByCredentials = async (email, password) => {
+  const user = await UserModel.findOne({
+    email,
+  }).select('+password -createdAt -updatedAt');
+  if (!user) {
+    throw new Error('Invalid email or password');
+  }
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    throw new Error('Invalid email or password');
+  }
+  user.password = undefined;
+  return user;
+};
+const UserModel = mongoose.model('User', userSchema);
+module.exports = UserModel;
