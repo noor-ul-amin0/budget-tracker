@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Typography } from '@mui/material';
+import { formatAsCurrency } from '../../utils/currency';
 
 interface ViewBudgetProps {
   budget: number;
@@ -9,7 +10,9 @@ interface ViewBudgetProps {
 const ViewBudget: React.FC<ViewBudgetProps> = ({ budget, handleEditClick }) => {
   return (
     <>
-      <Typography variant="body1">Budget: PKR:{budget}</Typography>
+      <Typography variant="body1">
+        Budget: {formatAsCurrency(budget)}
+      </Typography>
       <Button variant="contained" color="primary" onClick={handleEditClick}>
         Edit
       </Button>
