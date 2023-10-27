@@ -1,6 +1,6 @@
 import { Grid, Paper } from '@mui/material';
-import InputField from '../../components/common/input_field';
-import Button from '../../components/common/button';
+import InputField from '../common/input_field';
+import Button from '../common/button';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
