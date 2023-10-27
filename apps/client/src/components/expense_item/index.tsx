@@ -3,6 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { FC } from 'react';
 import { Expense } from '../../types/expense';
+import { formatAsCurrency } from '../../utils/currency';
 
 interface ExpenseItemProps {
   expense: Expense;
@@ -38,7 +39,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
               borderRadius: '50px',
             }}
           >
-            PKR: {expense.cost}
+            {formatAsCurrency(expense.cost)}
           </Typography>
           <IconButton size="small" onClick={onEditClick}>
             <EditIcon color="primary" />

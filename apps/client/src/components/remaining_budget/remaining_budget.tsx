@@ -1,4 +1,5 @@
 import { Paper } from '@mui/material';
+import { formatAsCurrency } from '../../utils/currency';
 
 const RemainingBudget = () => {
   const alertType = 'success';
@@ -12,7 +13,7 @@ const RemainingBudget = () => {
       }}
       className={alertType}
     >
-      <span>Remaining: PKR:{20 - 10}</span>
+      <span>Remaining: {formatAsCurrency(3000 - 1300)}</span>
     </Paper>
   );
 };
