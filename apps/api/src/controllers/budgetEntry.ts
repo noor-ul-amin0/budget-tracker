@@ -58,7 +58,17 @@ export const createEntry = catchAsyncAwait(
 
 export const getEntries = catchAsyncAwait(
   async (req: Request, res: Response) => {
-    const entries = await BudgetEntry.find({ userId: req.user._id });
+    // Define the pagination options
+    const options = {
+      page: req.query.page ? parseInt(req.query.page as string) : 1,
+      limit: req.query.limit ? parseInt(req.query.limit as string) : 10,
+    };
+    const entries = await BudgetEntry.paginate(
+      {
+        userId: req.user._id,
+      },
+      options
+    );
     res.send(entries);
   }
 );
