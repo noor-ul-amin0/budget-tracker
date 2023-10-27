@@ -1,10 +1,11 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const budgetEntrySchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     name: {
@@ -20,6 +21,8 @@ const budgetEntrySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const BudgetEntry = mongoose.model("BudgetEntry", budgetEntrySchema);
+budgetEntrySchema.plugin(mongoosePaginate);
+
+const BudgetEntry = mongoose.model('BudgetEntry', budgetEntrySchema);
 
 module.exports = BudgetEntry;
