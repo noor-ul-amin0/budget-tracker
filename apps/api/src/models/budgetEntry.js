@@ -18,8 +18,14 @@ const budgetEntrySchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
+
+budgetEntrySchema.pre('find', function (next) {
+  this.sort({ createdAt: -1 });
+  this.select('-userId -createdAt -updatedAt');
+  next();
+});
 
 budgetEntrySchema.plugin(mongoosePaginate);
 
