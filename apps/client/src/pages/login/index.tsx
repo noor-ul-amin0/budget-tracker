@@ -13,7 +13,7 @@ import * as Yup from 'yup';
 import { useLoginMutation } from '../../redux/auth/authService';
 import { useAppDispatch } from '../../hooks/store';
 import { showToast } from '../../redux/toast/toastSlice';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ToastType } from '../../constants/toast';
 import './styles.scss';
 
@@ -28,6 +28,7 @@ const schema = Yup.object().shape({
 });
 
 export default function Login() {
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
@@ -45,7 +46,7 @@ export default function Login() {
           message: 'Logged in successfully',
         })
       );
-      navigate('/');
+      navigate(location.state?.from || '/');
     } catch (error: any) {
       let message = '';
       if (error.data && error.data.message) {
