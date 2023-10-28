@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { Container, Typography, Grid, Paper } from '@mui/material';
+import { Container, Typography, Grid, Paper, Pagination } from '@mui/material';
 import ExpenseList from '../../components/expense_list';
 import AddExpenseDialog from '../../components/add_expense_dialogue';
 import { Expense } from '../../types/expense';
 import BudgetExpensesHeader from '../../components/budget_expenses_header';
 import BudgetExpensesControls from '../../components/budget_expense_control';
 
-const expenses = Array.from({ length: 10 })
+const ITEMS_PER_PAGE = 10; // Number of items per page
+
+const expenses = Array.from({ length: 100 })
   .fill(null)
   .map((_, i) => ({ id: ++i + '', name: 'Expense ' + i, cost: i }));
 
 const Home = () => {
+  const [page, setPage] = useState(1);
   const [{ isEditMode, editableExpense }, setExpenseEditState] = useState<{
     isEditMode: boolean;
     editableExpense: Expense;
@@ -42,6 +45,19 @@ const Home = () => {
   const handleAddExpense = () => {
     setShowDialog(true);
   };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+  };
+
+  const paginatedExpenses = expenses.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
+  );
+
   return (
     <Container>
       <BudgetExpensesHeader />
@@ -56,12 +72,19 @@ const Home = () => {
         <Grid item xs={12}>
           <Paper>
             <ExpenseList
-              expenses={expenses}
+              expenses={paginatedExpenses}
               handleEditExpense={handleEditExpense}
               handleDeleteExpense={handleDeleteExpense}
             />
           </Paper>
         </Grid>
+      </Grid>
+      <Grid container justifyContent="center" mt={2}>
+        <Pagination
+          count={Math.ceil(expenses.length / ITEMS_PER_PAGE)}
+          page={page}
+          onChange={handlePageChange}
+        />
       </Grid>
       {showDialog && (
         <AddExpenseDialog
