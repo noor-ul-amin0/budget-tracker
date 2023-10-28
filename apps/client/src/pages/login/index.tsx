@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '../../components/common/button';
 import Link from '@mui/material/Link';
@@ -11,7 +10,11 @@ import InputField from '../../components/common/input_field';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-
+import { useLoginMutation } from '../../redux/auth/authService';
+import { useAppDispatch } from '../../hooks/store';
+import { showToast } from '../../redux/toast/toastSlice';
+import { useNavigate } from 'react-router-dom';
+import { ToastType } from '../../constants/toast';
 import './styles.scss';
 
 type FormValues = {
@@ -25,13 +28,39 @@ const schema = Yup.object().shape({
 });
 
 export default function Login() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [login, { isLoading }] = useLoginMutation();
   const { control, handleSubmit } = useForm<FormValues>({
     mode: 'onChange',
     defaultValues: { email: '', password: '' },
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<FormValues> = (formData) => {
-    console.log('🚀 ~ file: index.tsx:21 ~ onSubmit ~ formData:', formData);
+  const onSubmit: SubmitHandler<FormValues> = async (formData) => {
+    try {
+      await login(formData).unwrap();
+      dispatch(
+        showToast({
+          type: ToastType.SUCCESS,
+          message: 'Logged in successfully',
+        })
+      );
+      navigate('/');
+    } catch (error: any) {
+      let message = '';
+      if (error.data && error.data.message) {
+        message = error.data.message;
+      } else {
+        message = error.message;
+      }
+
+      dispatch(
+        showToast({
+          type: ToastType.ERROR,
+          message,
+        })
+      );
+    }
   };
 
   return (
