@@ -10,7 +10,7 @@ type AuthState = {
 
 const initialState = {
   user: null,
-  token: localStorage.getItem('token') || null,
+  token: null,
 } as AuthState;
 
 const authSlice = createSlice({
@@ -18,7 +18,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      localStorage.removeItem('userToken');
       state.user = null;
       state.token = null;
     },
@@ -29,7 +28,6 @@ const authSlice = createSlice({
       (state, { payload }) => {
         state.token = payload.token;
         state.user = payload.data;
-        localStorage.setItem('token', payload.token);
       }
     );
   },
