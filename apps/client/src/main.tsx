@@ -8,7 +8,8 @@ import { ThemeProvider } from '@emotion/react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Provider as ReduxProvider } from 'react-redux';
-import { store } from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './redux/store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -24,7 +25,9 @@ root.render(
           <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <App />
+              <PersistGate loading={null} persistor={persistor}>
+                <App />
+              </PersistGate>
             </LocalizationProvider>
           </ThemeProvider>
         </StyledEngineProvider>
