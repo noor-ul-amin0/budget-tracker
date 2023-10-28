@@ -35,14 +35,18 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 //-------------------------------------------------------------------------------------------------------------
 
+userSchema.pre('find', function (next) {
+  this.select('-createdAt -updatedAt');
+  next();
+});
+
 userSchema.pre('save', async function (next) {
-  const user = this;
-  if (!user.isModified('password')) return next();
-  user.password = await bcrypt.hash(user.password, 12);
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 //-------------------------------------------------------------------------------------------------------------
@@ -55,11 +59,10 @@ userSchema.methods.confirmPassword = async function (
 //-------------------------------------------------------------------------------------------------------------
 // generating auth token
 userSchema.methods.generateAuthToken = async function () {
-  const user = this;
   const token = jwt.sign(
     {
-      id: user._id + '',
-      email: user.email,
+      id: this._id + '',
+      email: this.email,
     },
     process.env.JWT_SECRET,
     {
