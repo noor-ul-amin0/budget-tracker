@@ -46,13 +46,17 @@ export const createEntry = catchAsyncAwait(
 
     // Check if the total budget entries exceed the user's budget limit
     if (user.budgetLimit < totalBudgetEntries[0].total) {
-      const notification = await Notification.create({
+      await Notification.create({
         userId: user._id,
         message: 'You have exceeded your budget for the current month!',
       });
     }
 
-    res.status(201).send(budgetEntry);
+    const budgetEntryObj = budgetEntry.toObject();
+    delete budgetEntryObj.userId;
+    delete budgetEntryObj.createdAt;
+    delete budgetEntryObj.updatedAt;
+    res.status(201).send(budgetEntryObj);
   }
 );
 
@@ -92,8 +96,11 @@ export const updateEntry = catchAsyncAwait(
         )
       );
     }
-
-    res.status(200).send(updatedEntry);
+    const budgetEntryObj = updatedEntry.toObject();
+    delete budgetEntryObj.userId;
+    delete budgetEntryObj.createdAt;
+    delete budgetEntryObj.updatedAt;
+    res.status(200).send(budgetEntryObj);
   }
 );
 
