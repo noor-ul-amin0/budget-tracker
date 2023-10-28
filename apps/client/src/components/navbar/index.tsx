@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '../common/button';
 import MenuItem from '@mui/material/MenuItem';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
 import UserAuthMenu from './user_auth_menu';
 import { useAppDispatch } from '../../hooks/store';
@@ -24,7 +24,7 @@ function Navbar() {
   const dispatch = useAppDispatch();
   const auth = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -58,9 +58,6 @@ function Navbar() {
     navigate('/login');
   };
 
-  if (location.pathname === '/login' || location.pathname === '/signup') {
-    return null;
-  }
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
