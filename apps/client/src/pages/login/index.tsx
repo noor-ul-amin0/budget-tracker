@@ -101,7 +101,7 @@ export default function Login() {
             variant="contained"
             text="Login"
             loading={isLoading}
-            loadingLabel="Logging..."
+            loadingLabel="Logging in..."
             onClick={handleSubmit(onSubmit)}
           />
           <Grid container>
