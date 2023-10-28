@@ -24,7 +24,7 @@ type FormValues = {
 // Yup schema
 const schema = Yup.object().shape({
   email: Yup.string().required().email(),
-  password: Yup.string().required().min(8),
+  password: Yup.string().required(),
 });
 
 export default function Login() {
@@ -95,12 +95,14 @@ export default function Login() {
             autoComplete="current-password"
           />
           <Button
+            className="login_btn"
             type="submit"
             fullWidth
             variant="contained"
             text="Login"
+            loading={isLoading}
+            loadingLabel="Logging..."
             onClick={handleSubmit(onSubmit)}
-            className="login_btn"
           />
           <Grid container>
             <Grid item>
