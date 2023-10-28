@@ -11,6 +11,12 @@ export interface LoginRequest {
   email: string;
   password: string;
 }
+interface SignupRequest {
+  name: string;
+  email: string;
+  password: string;
+  budgetLimit: number;
+}
 
 const baseUrl = import.meta.env.VITE_API_URL + '/api/';
 
@@ -34,10 +40,14 @@ export const api = createApi({
         body: credentials,
       }),
     }),
-    protected: builder.mutation<{ message: string }, void>({
-      query: () => 'protected',
+    signup: builder.mutation<null, SignupRequest>({
+      query: (userInfo) => ({
+        url: 'auth/signup',
+        method: 'POST',
+        body: userInfo,
+      }),
     }),
   }),
 });
 
-export const { useLoginMutation, useProtectedMutation } = api;
+export const { useLoginMutation, useSignupMutation } = api;
