@@ -11,6 +11,11 @@ import InputField from '../../components/common/input_field';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { useSignupMutation } from '../../redux/auth/authService';
+import { ToastType } from '../../constants/toast';
+import { useAppDispatch } from '../../hooks/store';
+import { useNavigate } from 'react-router-dom';
+import { showToast } from '../../redux/toast/toastSlice';
 
 import './styles.scss';
 
@@ -23,7 +28,7 @@ type FormValues = {
 // Yup schema
 const schema = Yup.object().shape({
   name: Yup.string().required(),
-  email: Yup.string().email().required(),
+  email: Yup.string().required().email(),
   password: Yup.string().required().min(8),
   budgetLimit: Yup.number()
     .required('Budget Limit is required')
@@ -31,13 +36,39 @@ const schema = Yup.object().shape({
 });
 
 export default function SignUp() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [signup, { isLoading }] = useSignupMutation();
   const { control, handleSubmit } = useForm<FormValues>({
     mode: 'onSubmit',
     defaultValues: { name: '', email: '', password: '', budgetLimit: 0 },
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<FormValues> = (formData) => {
-    console.log('🚀 ~ file: index.tsx:21 ~ onSubmit ~ formData:', formData);
+  const onSubmit: SubmitHandler<FormValues> = async (formData) => {
+    try {
+      await signup(formData).unwrap();
+      dispatch(
+        showToast({
+          type: ToastType.SUCCESS,
+          message: 'Your account has been created successfully, Please login.',
+        })
+      );
+      navigate('/login');
+    } catch (error: any) {
+      let message = '';
+      if (error.data && error.data.message) {
+        message = error.data.message;
+      } else {
+        message = error.message;
+      }
+
+      dispatch(
+        showToast({
+          type: ToastType.ERROR,
+          message,
+        })
+      );
+    }
   };
 
   return (
@@ -87,12 +118,13 @@ export default function SignUp() {
             type="number"
           />
           <Button
+            className="signup_button"
             type="submit"
             fullWidth
             variant="contained"
             text="Sign up"
+            loading={isLoading}
             onClick={handleSubmit(onSubmit)}
-            className="signup_button"
           />
           <Grid container>
             <Grid item>

@@ -28,7 +28,7 @@ export const signUp = catchAsyncAwait(
 
     // create a new user in the database
     await User.create(req.body);
-    res.sendStatus(201);
+    res.status(200).send({ success: true });
   }
 );
 

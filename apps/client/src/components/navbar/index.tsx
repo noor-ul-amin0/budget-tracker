@@ -7,11 +7,13 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '../common/button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/auth';
+import UserAuthMenu from './user_auth_menu';
+import { useAppDispatch } from '../../hooks/store';
+import { logout } from '../../redux/auth/authSlice';
 
 const pages: Array<{ label: string; path: string }> = [
   { label: 'Home', path: '/' },
@@ -19,8 +21,10 @@ const pages: Array<{ label: string; path: string }> = [
 ];
 
 function Navbar() {
+  const dispatch = useAppDispatch();
+  const auth = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -46,14 +50,14 @@ function Navbar() {
   const handleNavItemChange = (path: string) => {
     navigate(path);
   };
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
   const handleLogin = () => {
     navigate('/login');
   };
 
-  if (location.pathname === '/login' || location.pathname === '/signup') {
-    return null;
-  }
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -75,7 +79,6 @@ function Navbar() {
           >
             Budget Tracker
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -148,37 +151,14 @@ function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Button
-              onClick={handleLogin}
-              sx={{ my: 1, color: 'white' }}
-              variant="text"
-              text="Login"
+            <UserAuthMenu
+              auth={auth}
+              anchorElUser={anchorElUser}
+              handleOpenUserMenu={handleOpenUserMenu}
+              handleCloseUserMenu={handleCloseUserMenu}
+              handleLogout={handleLogout}
+              handleLogin={handleLogin}
             />
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem onClick={handleLogout}>
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
           </Box>
         </Toolbar>
       </Container>
