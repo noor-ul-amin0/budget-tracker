@@ -51,7 +51,7 @@ function Navbar() {
     navigate(path);
   };
   const handleLogout = () => {
-    dispatch(logout);
+    dispatch(logout());
     navigate('/login');
   };
   const handleLogin = () => {
