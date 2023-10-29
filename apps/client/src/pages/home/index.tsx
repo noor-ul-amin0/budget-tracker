@@ -5,7 +5,10 @@ import AddExpense from '../../components/add_expense';
 import { AddExpense as AddExpenseType, Expense } from '../../types/budget';
 import BudgetExpensesHeader from '../../components/budget_expenses_header';
 import BudgetExpensesControls from '../../components/budget_expense_control';
-import { useAddBudgetEntryMutation } from '../../redux/budget/budgetService';
+import {
+  useAddBudgetEntryMutation,
+  useGetBudgetEntriesQuery,
+} from '../../redux/budget/budgetService';
 import { showToast } from '../../redux/toast/toastSlice';
 import { ToastType } from '../../constants/toast';
 import { useAppDispatch } from '../../hooks/store';
@@ -27,8 +30,10 @@ const Home = () => {
     },
   });
   const [showDialog, setShowDialog] = useState(false);
-
+  const expensesData = useGetBudgetEntriesQuery(page);
   const [addBudgetEntry, { isLoading }] = useAddBudgetEntryMutation();
+
+  const showPagination = (expensesData.data?.totalDocs || 0) > ITEMS_PER_PAGE;
 
   const handleEditExpense = (expense_item: Expense) => {
     setExpenseEditState({ isEditMode: true, editableExpense: expense_item });
@@ -96,20 +101,24 @@ const Home = () => {
         <Grid item xs={12}>
           <Paper>
             <ExpenseList
-              expenses={[]}
+              expenses={expensesData.data?.docs || []}
               handleEditExpense={handleEditExpense}
               handleDeleteExpense={handleDeleteExpense}
             />
           </Paper>
         </Grid>
       </Grid>
-      <Grid container justifyContent="center" mt={2}>
-        <Pagination
-          count={Math.ceil(ITEMS_PER_PAGE)}
-          page={page}
-          onChange={handlePageChange}
-        />
-      </Grid>
+      {showPagination && (
+        <Grid container justifyContent="center" mt={2}>
+          <Pagination
+            count={expensesData.data?.totalPages}
+            page={page}
+            hideNextButton={!expensesData.data?.hasNextPage}
+            hidePrevButton={!expensesData.data?.hasPrevPage}
+            onChange={handlePageChange}
+          />
+        </Grid>
+      )}
       {showDialog && (
         <AddExpense
           open={showDialog}
