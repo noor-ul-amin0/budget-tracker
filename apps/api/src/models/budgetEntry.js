@@ -23,7 +23,6 @@ const budgetEntrySchema = new mongoose.Schema(
 
 budgetEntrySchema.pre('find', function (next) {
   this.sort({ createdAt: -1 });
-  this.select('-userId -createdAt -updatedAt');
   next();
 });
 
