@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Box, CircularProgress, Paper } from '@mui/material';
 import ViewBudget from '../view_budget';
 import EditBudget from '../edit_budget';
-import {
-  useEditBudgetLimitMutation,
-  useGetUserBudgetLimitQuery,
-} from '../../redux/user/userService';
 import { useAppDispatch } from '../../hooks/store';
 import { showToast } from '../../redux/toast/toastSlice';
 import { ToastType } from '../../constants/toast';
+import {
+  useEditBudgetLimitMutation,
+  useGetUserBudgetLimitQuery,
+} from '../../redux/budget/budgetService';
 
 const Budget = () => {
   const dispatch = useAppDispatch();
