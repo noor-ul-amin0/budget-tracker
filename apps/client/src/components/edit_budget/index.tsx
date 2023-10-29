@@ -1,31 +1,53 @@
-import React, { useState } from 'react';
-import { Button, Input } from '@mui/material';
+import { Button } from '@mui/material';
+import InputField from '../common/input_field';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
+type FormValues = {
+  budgetLimit: number;
+};
+// Yup schema
+const schema = Yup.object().shape({
+  budgetLimit: Yup.number().required().min(0, `Budget Limit can't be negative`),
+});
 interface EditBudgetProps {
   budget: number;
   handleSaveClick: (value: number) => void;
 }
 
 const EditBudget: React.FC<EditBudgetProps> = ({ budget, handleSaveClick }) => {
-  const [value, setValue] = useState(budget);
-
-  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(parseFloat(event.target.value) || 0);
-  };
-
-  const handleSave = () => {
-    handleSaveClick(value);
+  const {
+    control,
+    handleSubmit,
+    formState: { isDirty },
+  } = useForm<FormValues>({
+    mode: 'onChange',
+    defaultValues: { budgetLimit: budget },
+    resolver: yupResolver(schema),
+  });
+  const handleSave: SubmitHandler<FormValues> = (data) => {
+    if (!isDirty) return;
+    handleSaveClick(data.budgetLimit);
   };
 
   return (
     <>
-      <Input
+      <InputField
+        label="Budget Limit"
+        typeof="number"
+        control={control}
+        name="budgetLimit"
         required
         type="number"
-        value={value}
-        onChange={handleValueChange}
+        size="small"
+        fullWidth={false}
       />
-      <Button variant="contained" color="primary" onClick={handleSave}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSubmit(handleSave)}
+      >
         Save
       </Button>
     </>
