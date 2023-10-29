@@ -1,3 +1,4 @@
+import { startOfDay, endOfDay } from 'date-fns';
 import { Request, Response, NextFunction } from 'express';
 import validator from 'validator';
 import BudgetEntry from '../models/budgetEntry';
@@ -65,17 +66,40 @@ export const createEntry = catchAsyncAwait(
 
 export const getEntries = catchAsyncAwait(
   async (req: Request, res: Response) => {
+    interface Query {
+      [key: string]: any;
+    }
     // Define the pagination options
     const options = {
       page: req.query.page ? parseInt(req.query.page as string) : 1,
       limit: req.query.limit ? parseInt(req.query.limit as string) : 10,
+      lean: true,
     };
-    const entries = await BudgetEntry.paginate(
-      {
-        userId: req.user._id,
-      },
-      options
-    );
+
+    const query: Query = {
+      userId: req.user._id,
+    };
+
+    if (typeof req.query.startDate === 'string') {
+      query.createdAt = {
+        $gte: startOfDay(new Date(req.query.startDate)),
+      };
+    }
+
+    if (typeof req.query.endDate === 'string') {
+      query.createdAt = {
+        ...query.createdAt,
+        $lte: endOfDay(new Date(req.query.endDate)),
+      };
+    }
+
+    const entries = await BudgetEntry.paginate(query, options);
+    entries.docs.forEach((entry) => {
+      delete entry.id;
+      delete entry.userId;
+      delete entry.createdAt;
+      delete entry.updatedAt;
+    });
     res.send(entries);
   }
 );
