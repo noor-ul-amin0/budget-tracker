@@ -103,7 +103,7 @@ export const updateEntry = catchAsyncAwait(
     delete updatedEntry.userId;
     delete updatedEntry.createdAt;
     delete updatedEntry.updatedAt;
-    res.status(200).send(updatedEntry);
+    res.status(200).send({ success: true, data: updateEntry });
   }
 );
 

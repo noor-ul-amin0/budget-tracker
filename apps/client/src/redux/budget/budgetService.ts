@@ -102,6 +102,43 @@ export const budgetExpenseApi = createApi({
       }),
       invalidatesTags: ['BudgetEntry', 'BudgetLimit', 'BudgeStats'],
     }),
+    deleteBudgetEntry: builder.mutation<
+      { success: boolean; id: number },
+      string
+    >({
+      query(id: string) {
+        return {
+          url: `budget-entries/${id}`,
+          method: 'DELETE',
+        };
+      },
+      // Invalidates the tag for this Entry `id`, as well as the `PARTIAL-ENTRY` tag,
+      // causing the `addBudgetEntry` query to re-fetch if a component is subscribed to the query.
+      invalidatesTags: (result, error, id) => [
+        { type: 'BudgetEntry', id },
+        { type: 'BudgetEntry', id: 'PARTIAL-ENTRY' },
+        'BudgeStats',
+      ],
+    }),
+    editBudgetEntry: builder.mutation<
+      { success: boolean; data: Expense },
+      Expense
+    >({
+      query(data: Expense) {
+        return {
+          url: `budget-entries/${data._id}`,
+          method: 'PUT',
+          body: data,
+        };
+      },
+      // Invalidates the tag for this Entry `id`, as well as the `PARTIAL-ENTRY` tag,
+      // causing the `addBudgetEntry` query to re-fetch if a component is subscribed to the query.
+      invalidatesTags: (result, error, { _id: id }) => [
+        { type: 'BudgetEntry', id },
+        { type: 'BudgetEntry', id: 'PARTIAL-ENTRY' },
+        'BudgeStats',
+      ],
+    }),
   }),
 });
 
@@ -111,4 +148,6 @@ export const {
   useGetUserBudgetStatsQuery,
   useGetBudgetEntriesQuery,
   useAddBudgetEntryMutation,
+  useDeleteBudgetEntryMutation,
+  useEditBudgetEntryMutation,
 } = budgetExpenseApi;

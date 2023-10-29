@@ -8,19 +8,19 @@ import { formatAsCurrency } from '../../utils/currency';
 interface ExpenseItemProps {
   expense: Expense;
   handleEditExpense: (expense: Expense) => void;
-  handleDeleteExpense: (id: string) => void;
+  handleDeleteClick: (id: string) => void;
 }
 
 const ExpenseItem: FC<ExpenseItemProps> = ({
   expense,
   handleEditExpense,
-  handleDeleteExpense,
+  handleDeleteClick,
 }) => {
   const onEditClick = () => {
     handleEditExpense(expense);
   };
   const onDeleteClick = () => {
-    handleDeleteExpense(expense._id);
+    handleDeleteClick(expense._id);
   };
 
   return (
@@ -41,10 +41,10 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
           >
             {formatAsCurrency(expense.cost)}
           </Typography>
-          <IconButton size="small" onClick={onEditClick}>
+          <IconButton disableFocusRipple size="small" onClick={onEditClick}>
             <EditIcon color="primary" />
           </IconButton>
-          <IconButton size="small" onClick={onDeleteClick}>
+          <IconButton disableFocusRipple size="small" onClick={onDeleteClick}>
             <DeleteIcon color="error" />
           </IconButton>
         </>

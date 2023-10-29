@@ -7,70 +7,57 @@ import BudgetExpensesHeader from '../../components/budget_expenses_header';
 import BudgetExpensesControls from '../../components/budget_expense_control';
 import {
   useAddBudgetEntryMutation,
+  useDeleteBudgetEntryMutation,
+  useEditBudgetEntryMutation,
   useGetBudgetEntriesQuery,
 } from '../../redux/budget/budgetService';
 import { showToast } from '../../redux/toast/toastSlice';
 import { ToastType } from '../../constants/toast';
 import { useAppDispatch } from '../../hooks/store';
+import DeleteExpense from '../../components/delete_expense';
 
 const ITEMS_PER_PAGE = 10; // Number of items per page
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const [page, setPage] = useState(1);
+  const [expenseRowId, setExpenseRowId] = useState<string | null>(null);
   const [{ isEditMode, editableExpense }, setExpenseEditState] = useState<{
     isEditMode: boolean;
-    editableExpense: Expense;
+    editableExpense: AddExpenseType;
   }>({
     isEditMode: false,
     editableExpense: {
-      _id: '',
       name: '',
       cost: 0,
     },
   });
-  const [showDialog, setShowDialog] = useState(false);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showDelDialog, setShowDelDialog] = useState(false);
+
   const expensesData = useGetBudgetEntriesQuery(page);
-  const [addBudgetEntry, { isLoading }] = useAddBudgetEntryMutation();
+  const [addBudgetEntry, addRest] = useAddBudgetEntryMutation();
+  const [editBudgetEntry, editRest] = useEditBudgetEntryMutation();
+  const [deleteBudgetEntry] = useDeleteBudgetEntryMutation();
 
   const showPagination = (expensesData.data?.totalDocs || 0) > ITEMS_PER_PAGE;
 
   const handleEditExpense = (expense_item: Expense) => {
     setExpenseEditState({ isEditMode: true, editableExpense: expense_item });
-    setShowDialog(true);
+    setExpenseRowId(expense_item._id);
+    setShowAddDialog(true);
   };
-  const handleDeleteExpense = (id: string) => {};
-  const handleClose = () => {
-    if (isEditMode) {
-      setExpenseEditState({
-        isEditMode: false,
-        editableExpense: { _id: '', name: '', cost: 0 },
-      });
-    }
-    setShowDialog(false);
-  };
-  const handleFilterByDate = (date: Date | null) => {};
-  const handleAddExpense = () => {
-    setShowDialog(true);
-  };
-
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setPage(value);
-  };
-
-  const handleAddBudgetEntrySubmit = async (expense: AddExpenseType) => {
+  const handleDeleteExpense = async () => {
     try {
-      await addBudgetEntry(expense).unwrap();
+      if (!expenseRowId) return;
+      await deleteBudgetEntry(expenseRowId).unwrap();
       dispatch(
         showToast({
           type: ToastType.SUCCESS,
-          message: 'Expense added successfully',
+          message: 'Expense deleted successfully',
         })
       );
-      setShowDialog(false);
+      setShowDelDialog(false);
     } catch (error: any) {
       let message = '';
       if (error.data && error.data.message) {
@@ -86,24 +73,86 @@ const Home = () => {
       );
     }
   };
+  const handleCloseAddDialog = () => {
+    if (isEditMode) {
+      setExpenseEditState({
+        isEditMode: false,
+        editableExpense: { name: '', cost: 0 },
+      });
+      setExpenseRowId(null);
+    }
+    setShowAddDialog(false);
+  };
+  const handleFilterByDate = (date: Date | null) => {};
+  const handleAddExpenseClick = () => {
+    setShowAddDialog(true);
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+  };
+
+  const handleAddEditExpense = async (expense: AddExpenseType) => {
+    const successMsg = isEditMode
+      ? 'Expense updated successfully'
+      : 'Expense added successfully';
+    try {
+      if (isEditMode && expenseRowId) {
+        await editBudgetEntry({ _id: expenseRowId, ...expense }).unwrap();
+      } else {
+        await addBudgetEntry(expense).unwrap();
+      }
+      dispatch(
+        showToast({
+          type: ToastType.SUCCESS,
+          message: successMsg,
+        })
+      );
+      handleCloseAddDialog();
+    } catch (error: any) {
+      let message = '';
+      if (error.data && error.data.message) {
+        message = error.data.message;
+      } else {
+        message = error.message;
+      }
+      dispatch(
+        showToast({
+          type: ToastType.ERROR,
+          message,
+        })
+      );
+    }
+  };
+  const handleCloseDelDialog = () => {
+    setShowDelDialog(false);
+    setExpenseRowId(null);
+  };
+  const handleDeleteClick = (id: string) => {
+    setShowDelDialog(true);
+    setExpenseRowId(id);
+  };
 
   return (
     <Container>
       <BudgetExpensesHeader />
       <BudgetExpensesControls
         onFilterByDate={handleFilterByDate}
-        onAddExpense={handleAddExpense}
+        handleAddExpenseClick={handleAddExpenseClick}
       />
       <Typography variant="h5" mt={3} mb={1}>
         Expenses
       </Typography>
       <Grid container>
         <Grid item xs={12}>
-          <Paper>
+          <Paper elevation={3} sx={{ background: '#f5f5f5' }}>
             <ExpenseList
               expenses={expensesData.data?.docs || []}
               handleEditExpense={handleEditExpense}
-              handleDeleteExpense={handleDeleteExpense}
+              handleDeleteClick={handleDeleteClick}
             />
           </Paper>
         </Grid>
@@ -119,14 +168,21 @@ const Home = () => {
           />
         </Grid>
       )}
-      {showDialog && (
+      {showAddDialog && (
         <AddExpense
-          open={showDialog}
+          open={showAddDialog}
           isEditMode={isEditMode}
           initialData={editableExpense}
-          isLoading={isLoading}
-          onClose={handleClose}
-          handleBudgetEntrySubmit={handleAddBudgetEntrySubmit}
+          isLoading={addRest.isLoading || editRest.isLoading}
+          onClose={handleCloseAddDialog}
+          handleBudgetEntrySubmit={handleAddEditExpense}
+        />
+      )}
+      {showDelDialog && (
+        <DeleteExpense
+          open={showDelDialog}
+          onClose={handleCloseDelDialog}
+          onYes={handleDeleteExpense}
         />
       )}
     </Container>
