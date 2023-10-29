@@ -12,7 +12,7 @@ interface ExpenseListProps {
 const ExpenseList: FC<ExpenseListProps> = ({
   handleDeleteExpense,
   handleEditExpense,
-  expenses,
+  expenses = [],
 }) => {
   if (expenses.length === 0) {
     return (
