@@ -13,7 +13,7 @@ const budgetEntrySchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    price: {
+    cost: {
       type: Number,
       required: true,
     },

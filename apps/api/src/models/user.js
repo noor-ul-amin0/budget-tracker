@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema(
     budgetLimit: {
       type: Number,
       required: true,
+      min: [0, 'Budget limit must be greater than or equal to 0'],
     },
   },
   { timestamps: true, versionKey: false }

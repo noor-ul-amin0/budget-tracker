@@ -1,9 +1,12 @@
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import { formatAsCurrency } from '../../utils/currency';
+import { FC } from 'react';
+import Progress from '../common/progress';
 
-const RemainingBudget = () => {
-  const alertType = 'success';
-
+const RemainingBudget: FC<{ remainingBudget: number; isLoading: boolean }> = ({
+  remainingBudget,
+  isLoading,
+}) => {
   return (
     <Paper
       elevation={2}
@@ -11,9 +14,14 @@ const RemainingBudget = () => {
         padding: 2,
         lineHeight: '36px',
       }}
-      className={alertType}
     >
-      <span>Remaining: {formatAsCurrency(3000 - 1300)}</span>
+      <Box sx={{ display: 'flex', justifyContent: 'center', height: '36px' }}>
+        {isLoading ? (
+          <Progress />
+        ) : (
+          <span>Remaining: {formatAsCurrency(remainingBudget)}</span>
+        )}
+      </Box>
     </Paper>
   );
 };

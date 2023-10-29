@@ -7,6 +7,10 @@ import AppError from '../utils/AppError';
 
 export const createEntry = catchAsyncAwait(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { name, cost } = req.body;
+    if (!name || !cost) {
+      return next(new AppError('Please provide a name and cost', 400));
+    }
     let budgetEntry = null;
     try {
       // Create a new budget entry associated with the user
@@ -18,6 +22,7 @@ export const createEntry = catchAsyncAwait(
       if (error.code === 11000) {
         return next(new AppError('Entry already exists', 400));
       }
+      return next(new AppError(error.message, 400));
     }
 
     // Check if the entry exceeds the budget, and send a notification
@@ -39,13 +44,13 @@ export const createEntry = catchAsyncAwait(
       {
         $group: {
           _id: null,
-          total: { $sum: '$budget' },
+          total: { $sum: '$cost' },
         },
       },
     ]);
 
     // Check if the total budget entries exceed the user's budget limit
-    if (user.budgetLimit < totalBudgetEntries[0].total) {
+    if (user.budgetLimit < totalBudgetEntries[0]?.total) {
       await Notification.create({
         userId: user._id,
         message: 'You have exceeded your budget for the current month!',
@@ -84,8 +89,8 @@ export const updateEntry = catchAsyncAwait(
       return next(new AppError('Invalid entry id', 400));
     const updatedEntry = await BudgetEntry.findOneAndUpdate(
       { _id: entryId, userId: req.user._id },
-      req.body, // Use req.body to update fields as needed
-      { new: true, runValidators: true }
+      req.body,
+      { new: true, runValidators: true, lean: true }
     );
 
     if (!updatedEntry) {
@@ -96,11 +101,11 @@ export const updateEntry = catchAsyncAwait(
         )
       );
     }
-    const budgetEntryObj = updatedEntry.toObject();
-    delete budgetEntryObj.userId;
-    delete budgetEntryObj.createdAt;
-    delete budgetEntryObj.updatedAt;
-    res.status(200).send(budgetEntryObj);
+
+    delete updatedEntry.userId;
+    delete updatedEntry.createdAt;
+    delete updatedEntry.updatedAt;
+    res.status(200).send(updatedEntry);
   }
 );
 

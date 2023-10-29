@@ -20,7 +20,7 @@ export const getBudgetTrends = catchAsyncAwait(
       {
         $group: {
           _id: null,
-          total: { $sum: '$price' }, // Use 'price' or 'budget' as needed
+          total: { $sum: '$cost' }, // Use 'cost' or 'budget' as needed
         },
       },
     ]);
@@ -38,7 +38,7 @@ export const getBudgetTrends = catchAsyncAwait(
       {
         $group: {
           _id: null,
-          total: { $sum: '$price' }, // Use 'price' or 'budget' as needed
+          total: { $sum: '$cost' }, // Use 'cost' or 'budget' as needed
         },
       },
     ]);
@@ -56,7 +56,7 @@ export const getBudgetTrends = catchAsyncAwait(
       {
         $group: {
           _id: null,
-          total: { $sum: '$price' }, // Use 'price' or 'budget' as needed
+          total: { $sum: '$cost' }, // Use 'cost' or 'budget' as needed
         },
       },
     ]);
