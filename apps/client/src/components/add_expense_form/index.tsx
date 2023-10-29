@@ -32,12 +32,17 @@ const AddExpenseForm: FC<AddExpenseFormProps> = ({
   onClose,
   handleBudgetEntrySubmit,
 }) => {
-  const { control, handleSubmit } = useForm<FormValues>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isDirty },
+  } = useForm<FormValues>({
     mode: 'onSubmit',
     defaultValues: isEditMode ? initialData : { name: '', cost: 0 },
     resolver: yupResolver(schema),
   });
   const onSubmit: SubmitHandler<FormValues> = (formData) => {
+    if (!isDirty) return;
     handleBudgetEntrySubmit(formData);
   };
   return (
