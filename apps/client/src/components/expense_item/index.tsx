@@ -2,7 +2,7 @@ import { ListItem, ListItemText, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { FC } from 'react';
-import { Expense } from '../../types/expense';
+import { Expense } from '../../types/budget';
 import { formatAsCurrency } from '../../utils/currency';
 
 interface ExpenseItemProps {
@@ -20,7 +20,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
     handleEditExpense(expense);
   };
   const onDeleteClick = () => {
-    handleDeleteExpense(expense.id);
+    handleDeleteExpense(expense._id);
   };
 
   return (

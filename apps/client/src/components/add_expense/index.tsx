@@ -1,90 +1,40 @@
-import { Grid, Paper } from '@mui/material';
-import InputField from '../common/input_field';
-import Button from '../common/button';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import AddExpenseForm from '../add_expense_form';
 import { FC } from 'react';
+import { AddExpense as AddExpenseType } from '../../types/budget';
+import Dialog from '../common/dailog';
 
-export type FormValues = {
-  name: string;
-  cost: number;
-};
-
-interface AddExpenseFormProps {
-  onClose: VoidFunction;
+interface AddExpenseProps {
+  open: boolean;
+  isLoading: boolean;
   isEditMode: boolean;
-  initialData?: FormValues;
+  initialData: AddExpenseType;
+  onClose: () => void;
+  handleBudgetEntrySubmit: (data: AddExpenseType) => void;
 }
 
-// Yup schema
-const schema = Yup.object().shape({
-  name: Yup.string().required(),
-  cost: Yup.number().required().min(0),
-});
-
-const AddExpenseForm: FC<AddExpenseFormProps> = ({
-  onClose,
+const AddExpense: FC<AddExpenseProps> = ({
+  open,
   isEditMode = false,
+  isLoading = false,
   initialData,
+  onClose,
+  handleBudgetEntrySubmit,
 }) => {
-  const { control, handleSubmit } = useForm<FormValues>({
-    mode: 'onSubmit',
-    defaultValues: isEditMode ? initialData : { name: '', cost: 0 },
-    resolver: yupResolver(schema),
-  });
-  const onSubmit: SubmitHandler<FormValues> = (formData) => {
-    console.log('🚀 ~ file: index.tsx:21 ~ onSubmit ~ formData:', formData);
-  };
   return (
-    <Paper
-      variant="outlined"
-      sx={{ my: { xs: 2, md: 4 }, p: { xs: 2, md: 3 } }}
+    <Dialog
+      onClose={onClose}
+      open={open}
+      dialogTitle={isEditMode ? 'Edit Expense' : 'Add Expense'}
     >
-      <Grid
-        container
-        spacing={3}
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Grid item xs={12}>
-          <InputField
-            control={control}
-            margin="normal"
-            label="Name"
-            name="name"
-            autoComplete="name"
-            autoFocus
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputField
-            control={control}
-            margin="normal"
-            name="cost"
-            label="cost"
-            type="number"
-          />
-        </Grid>
-        <Grid display={'flex'} justifyContent={'flex-end'} item xs={12} mt={2}>
-          <Button
-            text="Save"
-            size="large"
-            type="submit"
-            variant="text"
-            onClick={handleSubmit(onSubmit)}
-          />
-          <Button
-            text="Close"
-            size="large"
-            type="button"
-            color="error"
-            variant="text"
-            onClick={onClose}
-          />
-        </Grid>
-      </Grid>
-    </Paper>
+      <AddExpenseForm
+        isEditMode={isEditMode}
+        isSaving={isLoading}
+        initialData={initialData}
+        onClose={onClose}
+        handleBudgetEntrySubmit={handleBudgetEntrySubmit}
+      />
+    </Dialog>
   );
 };
-export default AddExpenseForm;
+
+export default AddExpense;

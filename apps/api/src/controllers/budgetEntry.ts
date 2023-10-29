@@ -8,22 +8,17 @@ import AppError from '../utils/AppError';
 export const createEntry = catchAsyncAwait(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, cost } = req.body;
-    if (!name || !cost) {
+    if (!name || isNaN(cost)) {
       return next(new AppError('Please provide a name and cost', 400));
     }
-    let budgetEntry = null;
-    try {
-      // Create a new budget entry associated with the user
-      budgetEntry = await BudgetEntry.create({
-        ...req.body,
-        userId: req.user._id,
-      });
-    } catch (error) {
-      if (error.code === 11000) {
-        return next(new AppError('Entry already exists', 400));
-      }
-      return next(new AppError(error.message, 400));
+    const checkDuplicate = await BudgetEntry.findOne({ name });
+    if (checkDuplicate) {
+      return next(new AppError('Entry already exists', 409));
     }
+    const budgetEntry = await BudgetEntry.create({
+      ...req.body,
+      userId: req.user._id,
+    });
 
     // Check if the entry exceeds the budget, and send a notification
     const user = req.user;
@@ -61,7 +56,10 @@ export const createEntry = catchAsyncAwait(
     delete budgetEntryObj.userId;
     delete budgetEntryObj.createdAt;
     delete budgetEntryObj.updatedAt;
-    res.status(201).send(budgetEntryObj);
+    res.status(201).send({
+      success: true,
+      data: budgetEntryObj,
+    });
   }
 );
 
