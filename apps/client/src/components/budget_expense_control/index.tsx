@@ -4,13 +4,13 @@ import { Grid } from '@mui/material';
 import Button from '../../components/common/button';
 
 interface BudgetExpensesControlsProps {
-  onFilterByDate: (date: Date | null) => void;
-  onAddExpense: () => void;
+  onFilterByDate: (datonAddExpenseonAddExpensee: Date | null) => void;
+  handleAddExpenseClick: () => void;
 }
 
 const BudgetExpensesControls: FC<BudgetExpensesControlsProps> = ({
   onFilterByDate,
-  onAddExpense,
+  handleAddExpenseClick,
 }) => {
   return (
     <Grid
@@ -45,7 +45,11 @@ const BudgetExpensesControls: FC<BudgetExpensesControlsProps> = ({
           justifyContent: { xs: 'center', md: 'flex-end' },
         }}
       >
-        <Button text="Add Expense" onClick={onAddExpense} />
+        <Button
+          disableFocusRipple
+          text="Add Expense"
+          onClick={handleAddExpenseClick}
+        />
       </Grid>
     </Grid>
   );
