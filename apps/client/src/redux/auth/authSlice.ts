@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { api } from './authService';
+import { authApi } from './authService';
 import type { RootState } from '../store';
 import { User } from '../../types/user';
 
@@ -24,7 +24,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      api.endpoints.login.matchFulfilled,
+      authApi.endpoints.login.matchFulfilled,
       (state, { payload }) => {
         state.token = payload.token;
         state.user = payload.data;

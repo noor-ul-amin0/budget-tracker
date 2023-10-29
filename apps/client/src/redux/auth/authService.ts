@@ -20,7 +20,8 @@ interface SignupRequest {
 
 const baseUrl = import.meta.env.VITE_API_URL + '/api/';
 
-export const api = createApi({
+export const authApi = createApi({
+  reducerPath: 'api/auth',
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { getState }) => {
@@ -50,4 +51,4 @@ export const api = createApi({
   }),
 });
 
-export const { useLoginMutation, useSignupMutation } = api;
+export const { useLoginMutation, useSignupMutation } = authApi;
