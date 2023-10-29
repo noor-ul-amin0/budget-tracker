@@ -5,12 +5,12 @@ import { Expense } from '../../types/budget';
 
 interface ExpenseListProps {
   handleEditExpense: (expense: Expense) => void;
-  handleDeleteExpense: (id: string) => void;
+  handleDeleteClick: (id: string) => void;
   expenses: Expense[];
 }
 
 const ExpenseList: FC<ExpenseListProps> = ({
-  handleDeleteExpense,
+  handleDeleteClick,
   handleEditExpense,
   expenses = [],
 }) => {
@@ -41,7 +41,7 @@ const ExpenseList: FC<ExpenseListProps> = ({
             <ExpenseItem
               expense={expense}
               handleEditExpense={handleEditExpense}
-              handleDeleteExpense={handleDeleteExpense}
+              handleDeleteClick={handleDeleteClick}
             />
           </ListItem>
           {index < expenses.length - 1 && <Divider />}
