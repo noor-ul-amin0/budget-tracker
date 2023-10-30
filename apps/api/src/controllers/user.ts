@@ -45,7 +45,8 @@ export const calculateBudgetStats = catchAsyncAwait(
       success: true,
       data: {
         totalSpent,
-        remainingBudget,
+        remainingBudget: remainingBudget < 0 ? 0 : remainingBudget,
+        budgetExceeded: remainingBudget < 0,
       },
     });
   }
