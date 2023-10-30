@@ -9,6 +9,7 @@ type BudgetLimit = {
 type BudgetStats = {
   totalSpent: number;
   remainingBudget: number;
+  budgetExceeded: boolean;
 };
 
 interface UserBudgetLimitResponse {
@@ -44,7 +45,7 @@ export const budgetExpenseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['BudgetEntry', 'BudgetLimit', 'BudgeStats'],
+  tagTypes: ['BudgetEntry', 'BudgetLimit', 'BudgeStats', 'BudgeTrends'],
 
   endpoints: (builder) => ({
     getUserBudgetLimit: builder.query<UserBudgetLimitResponse, void>({
@@ -70,7 +71,7 @@ export const budgetExpenseApi = createApi({
         method: 'PUT',
         body: budgetData,
       }),
-      invalidatesTags: ['BudgetLimit', 'BudgeStats'],
+      invalidatesTags: ['BudgetLimit', 'BudgeStats', 'BudgeTrends'],
     }),
 
     getBudgetEntries: builder.query<
@@ -101,7 +102,12 @@ export const budgetExpenseApi = createApi({
         method: 'POST',
         body: budgetData,
       }),
-      invalidatesTags: ['BudgetEntry', 'BudgetLimit', 'BudgeStats'],
+      invalidatesTags: [
+        'BudgetEntry',
+        'BudgetLimit',
+        'BudgeStats',
+        'BudgeTrends',
+      ],
     }),
     deleteBudgetEntry: builder.mutation<
       { success: boolean; id: number },
@@ -119,6 +125,7 @@ export const budgetExpenseApi = createApi({
         { type: 'BudgetEntry', id },
         { type: 'BudgetEntry', id: 'PARTIAL-ENTRY' },
         'BudgeStats',
+        'BudgeTrends',
       ],
     }),
     editBudgetEntry: builder.mutation<
@@ -138,7 +145,12 @@ export const budgetExpenseApi = createApi({
         { type: 'BudgetEntry', id },
         { type: 'BudgetEntry', id: 'PARTIAL-ENTRY' },
         'BudgeStats',
+        'BudgeTrends',
       ],
+    }),
+    getBudgetTrends: builder.query<any, void>({
+      query: () => `budget-trends`,
+      providesTags: ['BudgeTrends'],
     }),
   }),
 });
@@ -151,4 +163,5 @@ export const {
   useAddBudgetEntryMutation,
   useDeleteBudgetEntryMutation,
   useEditBudgetEntryMutation,
+  useGetBudgetTrendsQuery,
 } = budgetExpenseApi;
