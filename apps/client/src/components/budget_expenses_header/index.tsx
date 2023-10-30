@@ -1,4 +1,4 @@
-import { Grid, Paper } from '@mui/material';
+import { Alert, Grid, Paper } from '@mui/material';
 import Budget from '../budget';
 import RemainingBudget from '../remaining_budget/remaining_budget';
 import ExpenseTotal from '../expense_total';
@@ -28,6 +28,13 @@ const BudgetExpensesHeader = () => {
             isLoading={isLoading}
           />
         </Paper>
+      </Grid>
+      <Grid item xs={12} sm={12}>
+        {budgetStats?.data.budgetExceeded && (
+          <Alert severity="info">
+            Your total expenses have exceeded the budget limit.
+          </Alert>
+        )}
       </Grid>
     </Grid>
   );

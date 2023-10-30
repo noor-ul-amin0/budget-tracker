@@ -76,7 +76,7 @@ export const getEntries = catchAsyncAwait(
     // Define the pagination options
     const options = {
       page: req.query.page ? parseInt(req.query.page as string) : 1,
-      limit: req.query.limit ? parseInt(req.query.limit as string) : 10,
+      limit: req.query.limit ? parseInt(req.query.limit as string) : 7,
       lean: true,
     };
 
@@ -93,7 +93,10 @@ export const getEntries = catchAsyncAwait(
       };
     }
 
-    if (typeof req.query.endDate === 'string') {
+    if (
+      typeof req.query.endDate === 'string' &&
+      isValidDate(req.query.endDate)
+    ) {
       query.createdAt = {
         ...query.createdAt,
         $lte: endOfDay(new Date(req.query.endDate)),
