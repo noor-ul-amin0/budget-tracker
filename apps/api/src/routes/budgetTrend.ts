@@ -6,6 +6,6 @@ const router = Router();
 
 router.use(authMiddleware);
 
-router.route('/trends').get(getBudgetTrends);
+router.route('/').get(getBudgetTrends);
 
 export default router;

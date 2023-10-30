@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import BudgetEntry from '../models/budgetEntry';
 import catchAsyncAwait from '../utils/catchAsyncAwait';
 
-// Function to calculate budget trends
 export const getBudgetTrends = catchAsyncAwait(
   async (req: Request, res: Response) => {
     const userId = req.user._id;
@@ -20,7 +19,7 @@ export const getBudgetTrends = catchAsyncAwait(
       {
         $group: {
           _id: null,
-          total: { $sum: '$cost' }, // Use 'cost' or 'budget' as needed
+          total: { $sum: '$cost' },
         },
       },
     ]);
@@ -38,7 +37,7 @@ export const getBudgetTrends = catchAsyncAwait(
       {
         $group: {
           _id: null,
-          total: { $sum: '$cost' }, // Use 'cost' or 'budget' as needed
+          total: { $sum: '$cost' },
         },
       },
     ]);
@@ -56,7 +55,7 @@ export const getBudgetTrends = catchAsyncAwait(
       {
         $group: {
           _id: null,
-          total: { $sum: '$cost' }, // Use 'cost' or 'budget' as needed
+          total: { $sum: '$cost' },
         },
       },
     ]);
