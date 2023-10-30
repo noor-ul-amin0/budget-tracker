@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { FC } from 'react';
 import { Expense } from '../../types/budget';
 import { formatAsCurrency } from '../../utils/currency';
+import { format, parseISO } from 'date-fns';
 
 interface ExpenseItemProps {
   expense: Expense;
@@ -22,7 +23,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
   const onDeleteClick = () => {
     handleDeleteClick(expense._id);
   };
-
+  const createdAtDate = format(parseISO(expense.createdAt), 'MMM dd, yyyy');
   return (
     <ListItem
       sx={{ justifyContent: 'space-between', alignItems: 'center' }}
@@ -50,7 +51,7 @@ const ExpenseItem: FC<ExpenseItemProps> = ({
         </>
       }
     >
-      <ListItemText primary={expense.name} />
+      <ListItemText primary={expense.name} secondary={createdAtDate} />
     </ListItem>
   );
 };
