@@ -4,11 +4,13 @@ import { Grid } from '@mui/material';
 import Button from '../../components/common/button';
 
 interface BudgetExpensesControlsProps {
+  filterDate: Date | null;
   onFilterByDate: (datonAddExpenseonAddExpensee: Date | null) => void;
   handleAddExpenseClick: () => void;
 }
 
 const BudgetExpensesControls: FC<BudgetExpensesControlsProps> = ({
+  filterDate,
   onFilterByDate,
   handleAddExpenseClick,
 }) => {
@@ -34,7 +36,12 @@ const BudgetExpensesControls: FC<BudgetExpensesControlsProps> = ({
           justifyContent: { xs: 'center', md: 'flex-end' },
         }}
       >
-        <DatePicker label="Filter by date" onChange={onFilterByDate} />
+        <DatePicker
+          label="Filter by date"
+          value={filterDate}
+          slotProps={{ field: { clearable: true } }}
+          onChange={onFilterByDate}
+        />
       </Grid>
       <Grid
         item
