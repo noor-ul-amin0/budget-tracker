@@ -3,6 +3,7 @@ import Budget from '../budget';
 import RemainingBudget from '../remaining_budget/remaining_budget';
 import ExpenseTotal from '../expense_total';
 import { useGetUserBudgetStatsQuery } from '../../redux/budget/budgetService';
+import { memo } from 'react';
 
 const BudgetExpensesHeader = () => {
   const { data: budgetStats, isLoading } = useGetUserBudgetStatsQuery();
@@ -40,4 +41,4 @@ const BudgetExpensesHeader = () => {
   );
 };
 
-export default BudgetExpensesHeader;
+export default memo(BudgetExpensesHeader);
