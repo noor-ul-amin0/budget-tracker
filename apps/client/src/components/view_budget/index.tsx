@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Typography } from '@mui/material';
+import { Fab, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import { formatAsCurrency } from '../../utils/currency';
 
 interface ViewBudgetProps {
@@ -13,9 +14,15 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({ budget, handleEditClick }) => {
       <Typography variant="body1">
         Budget: {formatAsCurrency(budget)}
       </Typography>
-      <Button variant="contained" color="primary" onClick={handleEditClick}>
-        Edit
-      </Button>
+      <Fab
+        color="primary"
+        size="small"
+        aria-label="edit"
+        disableFocusRipple
+        disableRipple
+      >
+        <EditIcon onClick={handleEditClick} />
+      </Fab>
     </>
   );
 };
