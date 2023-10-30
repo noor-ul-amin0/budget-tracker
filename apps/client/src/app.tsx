@@ -7,6 +7,7 @@ import Home from './pages/home';
 import PrivateRoute from './components/protected_route';
 import Toast from './components/common/toast';
 import PublicRoute from './components/public_route';
+import Reports from './pages/reports';
 
 export function App() {
   return (
@@ -20,6 +21,7 @@ export function App() {
         <Route element={<RootLayout />}>
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<Home />} />
+            <Route path="/reports" element={<Reports />} />
           </Route>
         </Route>
         {/* 👇️ only match this when no other routes match */}
