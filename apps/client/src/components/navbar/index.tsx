@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '../common/button';
 import MenuItem from '@mui/material/MenuItem';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
 import UserAuthMenu from './user_auth_menu';
 import { useAppDispatch } from '../../hooks/store';
@@ -21,6 +21,7 @@ const pages: Array<{ label: string; path: string }> = [
 ];
 
 function Navbar() {
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const auth = useAuth();
   const navigate = useNavigate();
@@ -143,7 +144,11 @@ function Navbar() {
               <Button
                 key={label}
                 onClick={() => handleNavItemChange(path)}
-                sx={{ my: 2, color: 'white' }}
+                sx={{
+                  my: 2,
+                  color: 'white',
+                  textDecoration: location.pathname === path ? 'underline' : '',
+                }}
                 variant="text"
                 text={label}
               />
