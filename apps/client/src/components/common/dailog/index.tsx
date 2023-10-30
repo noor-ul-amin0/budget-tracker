@@ -17,7 +17,7 @@ const MyDialog: FC<MyDialogProps> = ({
   return (
     <Dialog onClose={onClose} open={open}>
       {dialogTitle && (
-        <DialogTitle variant="h4" component="h1" align="center" mt={4} mb="4">
+        <DialogTitle variant="h4" component="h1" align="center" mt={2}>
           {dialogTitle}
         </DialogTitle>
       )}

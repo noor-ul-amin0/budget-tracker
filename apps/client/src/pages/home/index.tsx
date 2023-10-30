@@ -20,6 +20,7 @@ const ITEMS_PER_PAGE = 10; // Number of items per page
 
 const Home = () => {
   const dispatch = useAppDispatch();
+  const [filterDate, setFilterDate] = useState<Date | null>(null);
   const [page, setPage] = useState(1);
   const [expenseRowId, setExpenseRowId] = useState<string | null>(null);
   const [{ isEditMode, editableExpense }, setExpenseEditState] = useState<{
@@ -35,7 +36,12 @@ const Home = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showDelDialog, setShowDelDialog] = useState(false);
 
-  const expensesData = useGetBudgetEntriesQuery(page);
+  const filteredDate =
+    filterDate instanceof Date ? filterDate.toISOString() : filterDate;
+  const expensesData = useGetBudgetEntriesQuery({
+    page,
+    filterDate: filteredDate,
+  });
   const [addBudgetEntry, addRest] = useAddBudgetEntryMutation();
   const [editBudgetEntry, editRest] = useEditBudgetEntryMutation();
   const [deleteBudgetEntry] = useDeleteBudgetEntryMutation();
@@ -83,7 +89,9 @@ const Home = () => {
     }
     setShowAddDialog(false);
   };
-  const handleFilterByDate = (date: Date | null) => {};
+  const handleFilterByDate = (date: Date | null) => {
+    setFilterDate(date);
+  };
   const handleAddExpenseClick = () => {
     setShowAddDialog(true);
   };
@@ -140,16 +148,21 @@ const Home = () => {
     <Container>
       <BudgetExpensesHeader />
       <BudgetExpensesControls
+        filterDate={filterDate}
         onFilterByDate={handleFilterByDate}
         handleAddExpenseClick={handleAddExpenseClick}
       />
-      <Typography variant="h5" mt={3} mb={1}>
+      <Typography variant="h5" mb={1}>
         Expenses
       </Typography>
       <Grid container>
         <Grid item xs={12}>
-          <Paper elevation={3} sx={{ background: '#f5f5f5' }}>
+          <Paper
+            elevation={3}
+            sx={{ background: '#f5f5f5', minHeight: '505px' }}
+          >
             <ExpenseList
+              isLoading={expensesData.isLoading || expensesData.isFetching}
               expenses={expensesData.data?.docs || []}
               handleEditExpense={handleEditExpense}
               handleDeleteClick={handleDeleteClick}

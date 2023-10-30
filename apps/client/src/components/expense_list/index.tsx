@@ -1,19 +1,35 @@
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 import { Divider, List, ListItem, Typography, Box } from '@mui/material';
 import ExpenseItem from '../expense_item';
 import { Expense } from '../../types/budget';
+import Progress from '../common/progress';
 
 interface ExpenseListProps {
+  expenses: Expense[];
+  isLoading: boolean;
   handleEditExpense: (expense: Expense) => void;
   handleDeleteClick: (id: string) => void;
-  expenses: Expense[];
 }
 
 const ExpenseList: FC<ExpenseListProps> = ({
+  expenses = [],
+  isLoading,
   handleDeleteClick,
   handleEditExpense,
-  expenses = [],
 }) => {
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight={'505px'}
+      >
+        <Progress size={60} />
+      </Box>
+    );
+  }
+
   if (expenses.length === 0) {
     return (
       <Box
@@ -36,8 +52,8 @@ const ExpenseList: FC<ExpenseListProps> = ({
   return (
     <List component="nav">
       {expenses.map((expense, index) => (
-        <>
-          <ListItem key={index} disablePadding>
+        <Fragment key={index}>
+          <ListItem disablePadding>
             <ExpenseItem
               expense={expense}
               handleEditExpense={handleEditExpense}
@@ -45,7 +61,7 @@ const ExpenseList: FC<ExpenseListProps> = ({
             />
           </ListItem>
           {index < expenses.length - 1 && <Divider />}
-        </>
+        </Fragment>
       ))}
     </List>
   );
