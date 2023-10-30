@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Container, Typography, Grid, Paper, Pagination } from '@mui/material';
 import ExpenseList from '../../components/expense_list';
 import AddExpense from '../../components/add_expense';
@@ -89,12 +89,12 @@ const Home = () => {
     }
     setShowAddDialog(false);
   };
-  const handleFilterByDate = (date: Date | null) => {
+  const handleFilterByDate = useCallback((date: Date | null) => {
     setFilterDate(date);
-  };
-  const handleAddExpenseClick = () => {
+  }, []);
+  const handleAddExpenseClick = useCallback(() => {
     setShowAddDialog(true);
-  };
+  }, []);
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
