@@ -7,7 +7,7 @@ import { useGetUserBudgetStatsQuery } from '../../redux/budget/budgetService';
 const BudgetExpensesHeader = () => {
   const { data: budgetStats, isLoading } = useGetUserBudgetStatsQuery();
   return (
-    <Grid container mt={3} spacing={2}>
+    <Grid container mt={0} spacing={2}>
       <Grid item xs={12} sm={4}>
         <Paper>
           <Budget />
