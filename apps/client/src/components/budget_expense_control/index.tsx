@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Grid } from '@mui/material';
-import Button from '../../components/common/button';
+import { Fab, Grid } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 interface BudgetExpensesControlsProps {
   filterDate: Date | null;
@@ -52,14 +52,12 @@ const BudgetExpensesControls: FC<BudgetExpensesControlsProps> = ({
           justifyContent: { xs: 'center', md: 'flex-end' },
         }}
       >
-        <Button
-          disableFocusRipple
-          text="Add Expense"
-          onClick={handleAddExpenseClick}
-        />
+        <Fab color="primary" aria-label="add">
+          <AddIcon titleAccess="Add Expense" onClick={handleAddExpenseClick} />
+        </Fab>
       </Grid>
     </Grid>
   );
 };
 
-export default BudgetExpensesControls;
+export default memo(BudgetExpensesControls);
