@@ -13,7 +13,7 @@ const ExpenseTotal: FC<{ totalSpent: number; isLoading: boolean }> = ({
       sx={{ padding: 2, lineHeight: '36px' }}
       className="alert-primary"
     >
-      <Box sx={{ display: 'flex', justifyContent: 'center', height: '36px' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', height: '40px' }}>
         {isLoading ? (
           <Progress />
         ) : (

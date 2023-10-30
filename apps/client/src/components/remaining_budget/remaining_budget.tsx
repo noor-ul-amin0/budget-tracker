@@ -15,7 +15,7 @@ const RemainingBudget: FC<{ remainingBudget: number; isLoading: boolean }> = ({
         lineHeight: '36px',
       }}
     >
-      <Box sx={{ display: 'flex', justifyContent: 'center', height: '36px' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', height: '40px' }}>
         {isLoading ? (
           <Progress />
         ) : (
