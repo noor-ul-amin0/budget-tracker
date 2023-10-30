@@ -6,6 +6,10 @@ import Notification from '../models/notification';
 import catchAsyncAwait from '../utils/catchAsyncAwait';
 import AppError from '../utils/AppError';
 
+function isValidDate(dateString: string): boolean {
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
+}
 export const createEntry = catchAsyncAwait(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, cost } = req.body;
@@ -80,7 +84,10 @@ export const getEntries = catchAsyncAwait(
       userId: req.user._id,
     };
 
-    if (typeof req.query.startDate === 'string') {
+    if (
+      typeof req.query.startDate === 'string' &&
+      isValidDate(req.query.startDate)
+    ) {
       query.createdAt = {
         $gte: startOfDay(new Date(req.query.startDate)),
       };
@@ -97,7 +104,6 @@ export const getEntries = catchAsyncAwait(
     entries.docs.forEach((entry) => {
       delete entry.id;
       delete entry.userId;
-      delete entry.createdAt;
       delete entry.updatedAt;
     });
     res.send(entries);
