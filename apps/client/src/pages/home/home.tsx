@@ -40,11 +40,9 @@ const Home = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showDelDialog, setShowDelDialog] = useState(false);
 
-  const filteredDate =
-    filterDate instanceof Date ? filterDate.toISOString() : filterDate;
   const expensesData = useGetBudgetEntriesQuery({
     page,
-    filterDate: filteredDate,
+    filterDate,
   });
   const [addBudgetEntry, addRest] = useAddBudgetEntryMutation();
   const [editBudgetEntry, editRest] = useEditBudgetEntryMutation();

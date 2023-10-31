@@ -100,7 +100,7 @@ export const budgetExpenseApi = createApi({
 
     getBudgetEntries: builder.query<
       PaginatedBudgetEntryResponse,
-      { page: number; filterDate: string | null }
+      { page: number; filterDate: Date | null }
     >({
       query: ({ page = 1, filterDate }) =>
         `budget-entries?page=${page}&startDate=${filterDate}`,
