@@ -48,8 +48,8 @@ To get started with the project, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Navigate to the root of the directory and run `npm install` to install both frontend and backend dependencies.
-3. Start the API by running `nx serve api` from the "api" directory.
-4. Start the React app by running `nx serve client` from the "client" directory.
+3. Start the API by running `nx serve api` in the terminal.
+4. Start the React app by running `nx serve client` in the terminal.
 
 ## Project Structure
 
