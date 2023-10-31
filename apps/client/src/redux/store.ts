@@ -4,7 +4,6 @@ import authReducer from './auth/authSlice';
 import toastReducer from './toast/toastSlice';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { budgetExpenseApi } from './budget/budgetService';
 
 const persistConfig = {
   key: 'root',
@@ -16,15 +15,11 @@ const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
-    [budgetExpenseApi.reducerPath]: budgetExpenseApi.reducer,
     auth: persistedAuthReducer,
     toast: toastReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      authApi.middleware,
-      budgetExpenseApi.middleware
-    ),
+    getDefaultMiddleware().concat(authApi.middleware),
 });
 
 export const persistor = persistStore(store);

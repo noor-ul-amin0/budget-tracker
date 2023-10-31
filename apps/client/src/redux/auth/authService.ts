@@ -1,6 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../store';
 import { User } from '../../types/user';
+import { apiService } from '../api/apiService';
 
 export interface UserResponse {
   data: User;
@@ -18,21 +17,7 @@ interface SignupRequest {
   budgetLimit: number;
 }
 
-const baseUrl = import.meta.env.VITE_API_URL + '/api/';
-
-export const authApi = createApi({
-  reducerPath: 'api/auth',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers, { getState }) => {
-      // if we have a token in the store, use that for authenticated requests
-      const token = (getState() as RootState).auth.token;
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+export const authApi = apiService.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<UserResponse, LoginRequest>({
       query: (credentials) => ({
