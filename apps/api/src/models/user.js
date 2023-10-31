@@ -67,7 +67,7 @@ userSchema.methods.generateAuthToken = async function () {
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: '2 days',
+      expiresIn: '8h',
     }
   );
   return token;
