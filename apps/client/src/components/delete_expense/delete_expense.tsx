@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import Dialog from '../common/dailog';
+import Dialog from '../common/dialog/dialog';
 import { DialogActions, DialogContent } from '@mui/material';
-import Button from '../common/button';
+import Button from '../common/button/button';
 
 interface DeleteExpenseProps {
   open: boolean;

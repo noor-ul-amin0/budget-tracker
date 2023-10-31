@@ -1,59 +1,52 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '../../components/common/button';
+import Button from '../../components/common/button/button';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import InputField from '../../components/common/input_field';
+import InputField from '../../components/common/input_field/input_field';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useSignupMutation } from '../../redux/auth/authService';
-import { ToastType } from '../../constants/toast';
+import { useLoginMutation } from '../../redux/auth/authService';
 import { useAppDispatch } from '../../hooks/store';
-import { useNavigate } from 'react-router-dom';
 import { showToast } from '../../redux/toast/toastSlice';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ToastType } from '../../constants/toast';
 import './styles.scss';
 
 type FormValues = {
-  name: string;
   email: string;
   password: string;
-  budgetLimit: number;
 };
 // Yup schema
 const schema = Yup.object().shape({
-  name: Yup.string().required(),
   email: Yup.string().required().email(),
-  password: Yup.string().required().min(8),
-  budgetLimit: Yup.number()
-    .required('Budget Limit is required')
-    .min(0, 'Budget Limit must not be negative'),
+  password: Yup.string().required(),
 });
 
-export default function SignUp() {
+export default function Login() {
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [signup, { isLoading }] = useSignupMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const { control, handleSubmit } = useForm<FormValues>({
-    mode: 'onSubmit',
-    defaultValues: { name: '', email: '', password: '', budgetLimit: 0 },
+    mode: 'onChange',
+    defaultValues: { email: '', password: '' },
     resolver: yupResolver(schema),
   });
   const onSubmit: SubmitHandler<FormValues> = async (formData) => {
     try {
-      await signup(formData).unwrap();
+      await login(formData).unwrap();
       dispatch(
         showToast({
           type: ToastType.SUCCESS,
-          message: 'Your account has been created successfully, Please login.',
+          message: 'Logged in successfully',
         })
       );
-      navigate('/login');
+      navigate(location.state?.from || '/');
     } catch (error: any) {
       let message = '';
       if (error.data && error.data.message) {
@@ -78,7 +71,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Login
         </Typography>
         <Box
           component="form"
@@ -89,18 +82,10 @@ export default function SignUp() {
           <InputField
             control={control}
             margin="normal"
-            label="Full Name"
-            name="name"
-            autoComplete="name"
-            autoFocus
-          />
-          <InputField
-            control={control}
-            margin="normal"
-            name="email"
             label="Email Address"
-            type="email"
+            name="email"
             autoComplete="email"
+            autoFocus
           />
           <InputField
             control={control}
@@ -110,26 +95,20 @@ export default function SignUp() {
             type="password"
             autoComplete="current-password"
           />
-          <InputField
-            control={control}
-            margin="normal"
-            name="budgetLimit"
-            label="Budget Limit"
-            type="number"
-          />
           <Button
-            className="signup_button"
+            className="login_btn"
             type="submit"
             fullWidth
             variant="contained"
-            text="Sign up"
+            text="Login"
             loading={isLoading}
+            loadingLabel="Logging in..."
             onClick={handleSubmit(onSubmit)}
           />
           <Grid container>
             <Grid item>
-              <Link href="/login" variant="body2">
-                {'Already have an account? Login'}
+              <Link href="signup" variant="body2">
+                {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>

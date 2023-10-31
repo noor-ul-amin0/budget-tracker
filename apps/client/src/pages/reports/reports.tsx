@@ -1,7 +1,7 @@
 import { useGetBudgetTrendsQuery } from '../../redux/budget/budgetService';
-import LineChart from '../../components/common/line_chart';
+import LineChart from '../../components/common/line_chart/line_chart';
 import { Box, Grid } from '@mui/material';
-import Progress from '../../components/common/progress';
+import Progress from '../../components/common/progress/progress';
 
 const options = {
   responsive: true,

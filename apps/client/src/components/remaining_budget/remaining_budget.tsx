@@ -1,7 +1,7 @@
 import { Box, Paper } from '@mui/material';
 import { formatAsCurrency } from '../../utils/currency';
 import { FC } from 'react';
-import Progress from '../common/progress';
+import Progress from '../common/progress/progress';
 
 const RemainingBudget: FC<{ remainingBudget: number; isLoading: boolean }> = ({
   remainingBudget,

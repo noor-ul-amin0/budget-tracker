@@ -1,7 +1,7 @@
-import AddExpenseForm from '../add_expense_form';
+import AddExpenseForm from '../add_expense_form/add_expense_form';
 import { FC } from 'react';
 import { AddExpense as AddExpenseType } from '../../types/budget';
-import Dialog from '../common/dailog';
+import Dialog from '../common/dialog/dialog';
 
 interface AddExpenseProps {
   open: boolean;

@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 import { Typography, Grid, Paper } from '@mui/material';
-import ExpenseList from '../expense_list';
+import ExpenseList from '../expense_list/expense_list';
 import { Expense } from '../../types/budget';
 
 interface ExpensesProps {
