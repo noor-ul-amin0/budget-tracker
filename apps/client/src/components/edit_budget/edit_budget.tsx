@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import InputField from '../common/input_field';
+import InputField from '../common/input_field/input_field';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';

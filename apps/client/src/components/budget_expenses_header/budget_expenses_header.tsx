@@ -1,7 +1,7 @@
 import { Alert, Grid, Paper } from '@mui/material';
-import Budget from '../budget';
+import Budget from '../budget/budget';
 import RemainingBudget from '../remaining_budget/remaining_budget';
-import ExpenseTotal from '../expense_total';
+import ExpenseTotal from '../expense_total/expense_total';
 import { useGetUserBudgetStatsQuery } from '../../redux/budget/budgetService';
 import { memo } from 'react';
 

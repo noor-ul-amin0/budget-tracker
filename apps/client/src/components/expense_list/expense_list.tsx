@@ -1,8 +1,8 @@
 import { FC, Fragment } from 'react';
 import { Divider, List, ListItem, Typography, Box } from '@mui/material';
-import ExpenseItem from '../expense_item';
+import ExpenseItem from '../expense_item/expense_item';
 import { Expense } from '../../types/budget';
-import Progress from '../common/progress';
+import Progress from '../common/progress/progress';
 
 interface ExpenseListProps {
   expenses: Expense[];

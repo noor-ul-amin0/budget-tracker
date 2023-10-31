@@ -1,8 +1,8 @@
 import React, { Suspense, lazy, useCallback, useState } from 'react';
 import { Container, Grid, Pagination } from '@mui/material';
 import { AddExpense as AddExpenseType, Expense } from '../../types/budget';
-import BudgetExpensesHeader from '../../components/budget_expenses_header';
-import BudgetExpensesControls from '../../components/budget_expense_control';
+import BudgetExpensesHeader from '../../components/budget_expenses_header/budget_expenses_header';
+import BudgetExpensesControls from '../../components/budget_expense_control/budget_expense_control';
 import {
   useAddBudgetEntryMutation,
   useDeleteBudgetEntryMutation,
@@ -12,9 +12,13 @@ import {
 import { showToast } from '../../redux/toast/toastSlice';
 import { ToastType } from '../../constants/toast';
 import { useAppDispatch } from '../../hooks/store';
-import Expenses from '../../components/expenses';
-const AddExpense = lazy(() => import('../../components/add_expense'));
-const DeleteExpense = lazy(() => import('../../components/delete_expense'));
+import Expenses from '../../components/expenses/expenses';
+const AddExpense = lazy(
+  () => import('../../components/add_expense/add_expense')
+);
+const DeleteExpense = lazy(
+  () => import('../../components/delete_expense/delete_expense')
+);
 
 const ITEMS_PER_PAGE = 7; // Number of items per page
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, CircularProgress, Paper } from '@mui/material';
-import ViewBudget from '../view_budget';
-import EditBudget from '../edit_budget';
+import ViewBudget from '../view_budget/view_budget';
+import EditBudget from '../edit_budget/edit_budget';
 import { useAppDispatch } from '../../hooks/store';
 import { showToast } from '../../redux/toast/toastSlice';
 import { ToastType } from '../../constants/toast';
