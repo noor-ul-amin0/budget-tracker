@@ -52,7 +52,7 @@ const BudgetExpensesControls: FC<BudgetExpensesControlsProps> = ({
           justifyContent: { xs: 'center', md: 'flex-end' },
         }}
       >
-        <Fab color="primary" aria-label="add">
+        <Fab disableFocusRipple disableRipple color="primary" aria-label="add">
           <AddIcon titleAccess="Add Expense" onClick={handleAddExpenseClick} />
         </Fab>
       </Grid>
