@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Container, Typography, Grid, Paper, Pagination } from '@mui/material';
-import ExpenseList from '../../components/expense_list';
+import { Container, Grid, Pagination } from '@mui/material';
 import AddExpense from '../../components/add_expense';
 import { AddExpense as AddExpenseType, Expense } from '../../types/budget';
 import BudgetExpensesHeader from '../../components/budget_expenses_header';
@@ -15,8 +14,9 @@ import { showToast } from '../../redux/toast/toastSlice';
 import { ToastType } from '../../constants/toast';
 import { useAppDispatch } from '../../hooks/store';
 import DeleteExpense from '../../components/delete_expense';
+import Expenses from '../../components/expenses';
 
-const ITEMS_PER_PAGE = 10; // Number of items per page
+const ITEMS_PER_PAGE = 7; // Number of items per page
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -48,11 +48,11 @@ const Home = () => {
 
   const showPagination = (expensesData.data?.totalDocs || 0) > ITEMS_PER_PAGE;
 
-  const handleEditExpense = (expense_item: Expense) => {
+  const handleEditExpense = useCallback((expense_item: Expense) => {
     setExpenseEditState({ isEditMode: true, editableExpense: expense_item });
     setExpenseRowId(expense_item._id);
     setShowAddDialog(true);
-  };
+  }, []);
   const handleDeleteExpense = async () => {
     try {
       if (!expenseRowId) return;
@@ -139,10 +139,10 @@ const Home = () => {
     setShowDelDialog(false);
     setExpenseRowId(null);
   };
-  const handleDeleteClick = (id: string) => {
+  const handleDeleteClick = useCallback((id: string) => {
     setShowDelDialog(true);
     setExpenseRowId(id);
-  };
+  }, []);
 
   return (
     <Container>
@@ -152,24 +152,12 @@ const Home = () => {
         onFilterByDate={handleFilterByDate}
         handleAddExpenseClick={handleAddExpenseClick}
       />
-      <Typography variant="h5" mb={1}>
-        Expenses
-      </Typography>
-      <Grid container>
-        <Grid item xs={12}>
-          <Paper
-            elevation={3}
-            sx={{ background: '#f5f5f5', minHeight: '505px' }}
-          >
-            <ExpenseList
-              isLoading={expensesData.isLoading || expensesData.isFetching}
-              expenses={expensesData.data?.docs || []}
-              handleEditExpense={handleEditExpense}
-              handleDeleteClick={handleDeleteClick}
-            />
-          </Paper>
-        </Grid>
-      </Grid>
+      <Expenses
+        isLoading={expensesData.isLoading || expensesData.isFetching}
+        expenses={expensesData.data?.docs || []}
+        handleEditExpense={handleEditExpense}
+        handleDeleteClick={handleDeleteClick}
+      />
       {showPagination && (
         <Grid container justifyContent="center" mt={2}>
           <Pagination
