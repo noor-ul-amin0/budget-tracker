@@ -1,0 +1,19 @@
+.expenses_list_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 464px;
+}
+.empty_list_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  flex-direction: column;
+}
+.list {
+  padding: 0px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
