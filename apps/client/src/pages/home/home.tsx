@@ -12,7 +12,7 @@ import {
 import { showToast } from '../../redux/toast/toastSlice';
 import { ToastType } from '../../constants/toast';
 import { useAppDispatch } from '../../hooks/store';
-import Expenses from '../../components/expenses/expenses';
+import ExpensesList from '../../components/expenses_list/expenses_list';
 const AddExpense = lazy(
   () => import('../../components/add_expense/add_expense')
 );
@@ -20,7 +20,7 @@ const DeleteExpense = lazy(
   () => import('../../components/delete_expense/delete_expense')
 );
 
-const ITEMS_PER_PAGE = 7; // Number of items per page
+const ITEMS_PER_PAGE = 5; // Number of items per page
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -147,22 +147,25 @@ const Home = () => {
   }, []);
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <BudgetExpensesHeader />
       <BudgetExpensesControls
         filterDate={filterDate}
         onFilterByDate={handleFilterByDate}
         handleAddExpenseClick={handleAddExpenseClick}
       />
-      <Expenses
+      <ExpensesList
         isLoading={expensesData.isLoading || expensesData.isFetching}
         expenses={expensesData.data?.docs || []}
         handleEditExpense={handleEditExpense}
         handleDeleteClick={handleDeleteClick}
       />
       {showPagination && (
-        <Grid container justifyContent="center" mt={2}>
+        <Grid container justifyContent="end" mt={2}>
           <Pagination
+            variant="outlined"
+            shape="rounded"
+            color="primary"
             count={expensesData.data?.totalPages}
             page={page}
             hideNextButton={!expensesData.data?.hasNextPage}
