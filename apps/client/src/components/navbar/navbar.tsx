@@ -15,6 +15,7 @@ import UserAuthMenu from './user_auth_menu';
 import { useAppDispatch } from '../../hooks/store';
 import { logout } from '../../redux/auth/authSlice';
 import logoImg from '../../assets/logo.png';
+import styles from './navbar.module.scss';
 
 const pages: Array<{ label: string; path: string }> = [
   { label: 'Home', path: '/' },
@@ -22,7 +23,6 @@ const pages: Array<{ label: string; path: string }> = [
 ];
 
 function Navbar() {
-  const location = useLocation();
   const dispatch = useAppDispatch();
   const auth = useAuth();
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static" sx={{ background: '#ffffff' }} elevation={0}>
+    <AppBar position="static" className={styles.appbar} elevation={0}>
       <Container maxWidth="xl" sx={{ my: 2 }}>
         <Toolbar disableGutters>
           <Box
@@ -108,7 +108,6 @@ function Navbar() {
                   <Typography
                     textAlign="center"
                     onClick={() => handleNavItemChange(path)}
-                    sx={{ color: '#00004F' }}
                   >
                     {label}
                   </Typography>
@@ -140,18 +139,10 @@ function Navbar() {
               <Box key={path}>
                 <Button
                   key={label}
-                  onClick={() => handleNavItemChange(path)}
-                  sx={{
-                    fontSize: '16px',
-                    fontWeight: 'medium',
-                    mr: 2,
-                    color: location.pathname === path ? '#3fabec' : '#00004F',
-                    borderBottom:
-                      location.pathname === path ? '2px solid #00004F' : 'none',
-                    borderRadius: '0px',
-                  }}
+                  className={`${styles.nav_item}`}
                   variant="text"
                   text={label}
+                  onClick={() => handleNavItemChange(path)}
                 />
               </Box>
             ))}
