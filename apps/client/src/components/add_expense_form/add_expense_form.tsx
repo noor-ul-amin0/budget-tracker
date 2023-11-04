@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { FC } from 'react';
+import styles from './add_expense_form.module.scss';
 
 export type FormValues = {
   name: string;
@@ -75,22 +76,22 @@ const AddExpenseForm: FC<AddExpenseFormProps> = ({
             type="number"
           />
         </Grid>
-        <Grid display={'flex'} justifyContent={'flex-end'} item xs={12} mt={2}>
+        <Grid className={styles.form_actions_container} item xs={12} mt={2}>
+          <Button
+            text="Close"
+            size="large"
+            type="button"
+            className={styles.form_close_btn}
+            variant="outlined"
+            onClick={onClose}
+          />
           <Button
             text="Save"
             size="large"
             type="submit"
             loading={isSaving}
-            variant="text"
+            className={styles.form_save_btn}
             onClick={handleSubmit(onSubmit)}
-          />
-          <Button
-            text="Close"
-            size="large"
-            type="button"
-            color="error"
-            variant="text"
-            onClick={onClose}
           />
         </Grid>
       </Grid>
