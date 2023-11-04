@@ -6,7 +6,7 @@ import { Expense } from '../../types/budget';
 import { FC } from 'react';
 import { format, parseISO } from 'date-fns';
 import { formatAsCurrency } from '../../utils/currency';
-
+import styles from './expense_item.module.scss';
 interface ExpenseItemProps {
   expense: Expense;
   handleEditExpense: (expense: Expense) => void;
@@ -43,7 +43,9 @@ const ListItem: FC<ExpenseItemProps> = ({
             {createdAtDate}
           </Typography>
         </Box>
-        <Typography>{formatAsCurrency(expense.cost)}</Typography>
+        <Typography className={styles.currency}>
+          {formatAsCurrency(expense.cost)}
+        </Typography>
         <Box>
           <IconButton disableFocusRipple size="small" onClick={onEditClick}>
             <EditIcon color="primary" />
