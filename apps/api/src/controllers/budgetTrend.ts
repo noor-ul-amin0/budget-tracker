@@ -85,7 +85,7 @@ export const getBudgetTrends = catchAsyncAwait(
       ],
       xAxis: [
         {
-          id: 'expenses',
+          id: 'total',
           data: ['Last Month', 'Last 6 Months', 'Last 12 Months'],
           scaleType: 'band',
           valueFormatter: (value) => value.toString(),
