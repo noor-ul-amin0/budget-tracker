@@ -11,7 +11,6 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './redux/store';
 import theme from './theme';
-import '@fontsource/roboto';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -24,11 +23,11 @@ root.render(
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <PersistGate loading={null} persistor={persistor}>
+            <PersistGate loading={null} persistor={persistor}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <App />
-              </PersistGate>
-            </LocalizationProvider>
+              </LocalizationProvider>
+            </PersistGate>
           </ThemeProvider>
         </StyledEngineProvider>
       </ReduxProvider>
