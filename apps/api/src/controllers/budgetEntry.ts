@@ -76,7 +76,7 @@ export const getEntries = catchAsyncAwait(
     // Define the pagination options
     const options = {
       page: req.query.page ? parseInt(req.query.page as string) : 1,
-      limit: req.query.limit ? parseInt(req.query.limit as string) : 7,
+      limit: req.query.limit ? parseInt(req.query.limit as string) : 5,
       lean: true,
     };
 
