@@ -14,6 +14,7 @@ import { useAuth } from '../../hooks/auth';
 import UserAuthMenu from './user_auth_menu';
 import { useAppDispatch } from '../../hooks/store';
 import { logout } from '../../redux/auth/authSlice';
+import logoImg from '../../assets/logo.png';
 
 const pages: Array<{ label: string; path: string }> = [
   { label: 'Home', path: '/' },
@@ -60,26 +61,19 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar position="static" sx={{ background: '#ffffff' }} elevation={0}>
+      <Container maxWidth="xl" sx={{ my: 2 }}>
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
+          <Box
             href="/"
+            component="a"
             sx={{
-              mr: 2,
+              mr: 5,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
             }}
           >
-            Budget Tracker
-          </Typography>
+            <img src={logoImg} alt="Logo" />
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -89,7 +83,7 @@ function Navbar() {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              <MenuIcon color="primary" />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -114,6 +108,7 @@ function Navbar() {
                   <Typography
                     textAlign="center"
                     onClick={() => handleNavItemChange(path)}
+                    sx={{ color: '#00004F' }}
                   >
                     {label}
                   </Typography>
@@ -121,37 +116,44 @@ function Navbar() {
               ))}
             </Menu>
           </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
+          <Box
             href="/"
+            component="a"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
             }}
           >
-            Budget Tracker
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <img src={logoImg} alt="Logo" />
+          </Box>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: {
+                xs: 'none',
+                md: 'flex',
+              },
+            }}
+          >
             {pages.map(({ label, path }) => (
-              <Button
-                key={label}
-                onClick={() => handleNavItemChange(path)}
-                sx={{
-                  my: 2,
-                  color: 'white',
-                  textDecoration: location.pathname === path ? 'underline' : '',
-                }}
-                variant="text"
-                text={label}
-              />
+              <Box key={path}>
+                <Button
+                  key={label}
+                  onClick={() => handleNavItemChange(path)}
+                  sx={{
+                    fontSize: '16px',
+                    fontWeight: 'medium',
+                    mr: 2,
+                    color: location.pathname === path ? '#3fabec' : '#00004F',
+                    borderBottom:
+                      location.pathname === path ? '2px solid #00004F' : 'none',
+                    borderRadius: '0px',
+                  }}
+                  variant="text"
+                  text={label}
+                />
+              </Box>
             ))}
           </Box>
 
