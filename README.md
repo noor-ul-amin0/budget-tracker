@@ -51,6 +51,20 @@ To get started with the project, follow these steps:
 3. Start the API by running `nx serve api` in the terminal.
 4. Start the React app by running `nx serve client` in the terminal.
 
+Certainly, here's the updated project structure section in your README:
+
 ## Project Structure
 
-The project follows a monorepo structure managed by Nx. Each application (frontend and backend) has its own "project.json" file containing scripts and configuration specific to that application.
+The project follows a monorepo structure managed by Nx. Each application (frontend and backend) is organized as follows:
+
+- **Frontend (React Application)**:
+  - Located in `apps/client`
+  - Contains the React application responsible for the user interface.
+  - You can find its "project.json" file with scripts and configuration specific to the React app in this directory.
+
+- **Backend (Express API)**:
+  - Located in `apps/api`
+  - Houses the Express API responsible for handling server-side logic and database operations.
+  - You can find its "project.json" file with scripts and configuration specific to the Express API in this directory.
+
+This structure ensures clear separation and organization of the frontend and backend components of the project, making it easier to manage and maintain.
