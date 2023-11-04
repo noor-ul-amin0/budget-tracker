@@ -1,7 +1,8 @@
 import React, { FC, memo } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Fab, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import Button from '../common/button/button';
 
 interface BudgetExpensesControlsProps {
   filterDate: Date | null;
@@ -16,8 +17,9 @@ const BudgetExpensesControls: FC<BudgetExpensesControlsProps> = ({
 }) => {
   return (
     <Grid
+      mt={2}
+      mb={4}
       container
-      mt={3}
       spacing={2}
       sx={{
         flexDirection: {
@@ -52,9 +54,12 @@ const BudgetExpensesControls: FC<BudgetExpensesControlsProps> = ({
           justifyContent: { xs: 'center', md: 'flex-end' },
         }}
       >
-        <Fab disableFocusRipple disableRipple color="primary" aria-label="add">
-          <AddIcon titleAccess="Add Expense" onClick={handleAddExpenseClick} />
-        </Fab>
+        <Button
+          sx={{ borderRadius: '10px' }}
+          startIcon={<AddIcon />}
+          onClick={handleAddExpenseClick}
+          text="Add expense"
+        />
       </Grid>
     </Grid>
   );
