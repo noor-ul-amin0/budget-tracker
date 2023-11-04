@@ -1,10 +1,11 @@
-import { ListItem, ListItemText, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
+import Card from '../common/card/card';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { FC } from 'react';
 import { Expense } from '../../types/budget';
-import { formatAsCurrency } from '../../utils/currency';
+import { FC } from 'react';
 import { format, parseISO } from 'date-fns';
+import { formatAsCurrency } from '../../utils/currency';
 
 interface ExpenseItemProps {
   expense: Expense;
@@ -12,48 +13,48 @@ interface ExpenseItemProps {
   handleDeleteClick: (id: string) => void;
 }
 
-const ExpenseItem: FC<ExpenseItemProps> = ({
+const ListItem: FC<ExpenseItemProps> = ({
   expense,
-  handleEditExpense,
   handleDeleteClick,
+  handleEditExpense,
 }) => {
+  const createdAtDate = format(parseISO(expense.createdAt), 'MMM dd, yyyy');
   const onEditClick = () => {
     handleEditExpense(expense);
   };
   const onDeleteClick = () => {
     handleDeleteClick(expense._id);
   };
-  const createdAtDate = format(parseISO(expense.createdAt), 'MMM dd, yyyy');
   return (
-    <ListItem
-      sx={{ justifyContent: 'space-between', alignItems: 'center' }}
-      secondaryAction={
-        <>
-          <Typography
-            variant="body2"
-            color="primary"
-            component="span"
-            sx={{
-              backgroundColor: 'primary.main',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '50px',
-            }}
-          >
-            {formatAsCurrency(expense.cost)}
+    <Card sx={{ height: '80px', borderRadius: '13px' }}>
+      <Box
+        sx={{
+          padding: '0px 20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Box>
+          <Typography variant="subtitle1" component="h1" fontSize={18}>
+            {expense.name}
           </Typography>
+          <Typography color={'gray'} fontSize={12}>
+            {createdAtDate}
+          </Typography>
+        </Box>
+        <Typography>{formatAsCurrency(expense.cost)}</Typography>
+        <Box>
           <IconButton disableFocusRipple size="small" onClick={onEditClick}>
             <EditIcon color="primary" />
           </IconButton>
           <IconButton disableFocusRipple size="small" onClick={onDeleteClick}>
             <DeleteIcon color="error" />
           </IconButton>
-        </>
-      }
-    >
-      <ListItemText primary={expense.name} secondary={createdAtDate} />
-    </ListItem>
+        </Box>
+      </Box>
+    </Card>
   );
 };
 
-export default ExpenseItem;
+export default ListItem;
