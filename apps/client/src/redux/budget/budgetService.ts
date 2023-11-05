@@ -131,7 +131,15 @@ export const budgetExpenseApi = apiService.injectEndpoints({
         'BudgeTrends',
       ],
     }),
-    getBudgetTrends: builder.query<any, void>({
+    getBudgetTrends: builder.query<
+      {
+        lastMonthTotal: number;
+        last6MonthsTotal: number;
+        last12MonthsTotal: number;
+        userBudgetLimit: number;
+      },
+      void
+    >({
       query: () => `budget-trends`,
       providesTags: ['BudgeTrends'],
     }),

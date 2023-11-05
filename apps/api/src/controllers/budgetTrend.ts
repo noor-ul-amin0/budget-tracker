@@ -60,49 +60,13 @@ export const getBudgetTrends = catchAsyncAwait(
       },
     ]);
 
-    // Check if the total budget entries exceed the user's budget limit
-    const user = req.user as any; // Modify this type according to your User model
-
-    // Prepare data for the chart
-    const chartData = {
-      series: [
-        {
-          type: 'bar',
-          stack: '',
-          yAxisKey: 'total',
-          data: [
-            lastMonthTotal[0]?.total || 0,
-            last6MonthsTotal[0]?.total || 0,
-            last12MonthsTotal[0]?.total || 0,
-          ],
-        },
-        {
-          type: 'line',
-          yAxisKey: 'budgetLimit',
-          color: 'red',
-          data: [user.budgetLimit, user.budgetLimit, user.budgetLimit],
-        },
-      ],
-      xAxis: [
-        {
-          id: 'total',
-          data: ['Last Month', 'Last 6 Months', 'Last 12 Months'],
-          scaleType: 'band',
-          valueFormatter: (value) => value.toString(),
-        },
-      ],
-      yAxis: [
-        {
-          id: 'total',
-          scaleType: 'linear',
-        },
-        {
-          id: 'budgetLimit',
-          scaleType: 'log',
-        },
-      ],
+    const userBudgetLimit = req.user.budgetLimit;
+    const response = {
+      lastMonthTotal: lastMonthTotal[0] ? lastMonthTotal[0].total : 0,
+      last6MonthsTotal: last6MonthsTotal[0] ? last6MonthsTotal[0].total : 0,
+      last12MonthsTotal: last12MonthsTotal[0] ? last12MonthsTotal[0].total : 0,
+      userBudgetLimit,
     };
-
-    res.send(chartData);
+    res.send(response);
   }
 );
