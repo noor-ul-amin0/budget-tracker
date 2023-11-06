@@ -64,19 +64,17 @@ const BudgetStatsCard: FC<BudgetStatsCardProps> = ({
         ) : (
           <>
             {icon && (
-              <Fab color="primary" className={styles.icon}>
+              <Fab
+                variant="extended"
+                size="large"
+                color="primary"
+                className={styles.icon}
+              >
                 {icon}
               </Fab>
             )}
             <Box>
-              <Typography
-                sx={{
-                  fontFamily: 'Roboto',
-                }}
-                className={styles.title}
-              >
-                {title}
-              </Typography>
+              <Typography className={styles.title}>{title}</Typography>
 
               {editMode ? (
                 <Box className={styles.action_box}>
