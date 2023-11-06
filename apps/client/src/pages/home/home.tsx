@@ -155,7 +155,7 @@ const Home = () => {
         handleAddExpenseClick={handleAddExpenseClick}
       />
       <ExpensesList
-        isLoading={expensesData.isLoading || expensesData.isFetching}
+        isLoading={expensesData.isLoading}
         expenses={expensesData.data?.docs || []}
         handleEditExpense={handleEditExpense}
         handleDeleteClick={handleDeleteClick}
