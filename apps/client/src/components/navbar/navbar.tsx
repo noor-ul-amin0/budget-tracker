@@ -9,12 +9,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '../common/button/button';
 import MenuItem from '@mui/material/MenuItem';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
 import UserAuthMenu from './user_auth_menu';
 import { useAppDispatch } from '../../hooks/store';
 import { logout } from '../../redux/auth/authSlice';
-import logoImg from '../../assets/logo.png';
 import styles from './navbar.module.scss';
 
 const pages: Array<{ label: string; path: string }> = [
@@ -64,16 +63,22 @@ function Navbar() {
     <AppBar position="static" className={styles.appbar} elevation={0}>
       <Container maxWidth="xl" sx={{ my: 2 }}>
         <Toolbar disableGutters>
-          <Box
-            href="/"
+          <Typography
+            variant="h5"
+            noWrap
             component="a"
+            href="/"
             sx={{
-              mr: 5,
+              mr: 2,
               display: { xs: 'none', md: 'flex' },
+              fontWeight: 800,
+              letterSpacing: '.1rem',
+              color: '#1398E8',
+              textDecoration: 'none',
             }}
           >
-            <img src={logoImg} alt="Logo" />
-          </Box>
+            Budget Tracker
+          </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -115,17 +120,23 @@ function Navbar() {
               ))}
             </Menu>
           </Box>
-          <Box
-            href="/"
+          <Typography
+            variant="h5"
+            noWrap
             component="a"
+            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
+              fontWeight: 700,
+              letterSpacing: '.1rem',
+              color: '#1398E8',
+              textDecoration: 'none',
             }}
           >
-            <img src={logoImg} alt="Logo" />
-          </Box>
+            Budget Tracker
+          </Typography>
           <Box
             sx={{
               flexGrow: 1,
